@@ -4,6 +4,9 @@ import PokemonDetail from './pages/pokemon-detail';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import PageNotFound from './pages/page-not-found';
 import PokemonEdit from './pages/pokemon-edit';
+import PokemonAdd from './pages/pokemon-add';
+import Login from './pages/login';
+import PrivateRoute from './PrivateRoute';
 
 const App: React.FC = () => {
   return (
@@ -15,11 +18,12 @@ const App: React.FC = () => {
           </div>
         </nav>
         <Routes>
-          <Route path="/" element={<PokemonList />} />
-          <Route path="/pokemons" element={<PokemonList />} />
-          <Route path="/pokemons/:id" element={<PokemonDetail />} />
-          <Route path="/pokemons/:id" element={<PokemonDetail />} />
-          <Route path="/pokemons/edit/:id" element={<PokemonEdit />} />
+          <Route path="/" element={<PrivateRoute element={<PokemonList />} />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/pokemons" element={<PrivateRoute element={<PokemonList />} />} />
+          <Route path="/pokemons/add" element={<PrivateRoute element={<PokemonAdd />} />} />
+          <Route path="/pokemons/:id" element={<PrivateRoute element={<PokemonDetail />} />} />
+          <Route path="/pokemons/edit/:id" element={<PrivateRoute element={<PokemonEdit />} />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>

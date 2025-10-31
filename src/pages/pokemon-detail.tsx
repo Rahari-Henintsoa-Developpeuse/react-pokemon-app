@@ -1,30 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Pokemon from '../models/pokemon';
-import POKEMONS from '../models/mock-pokemon';
+// import POKEMONS from '../models/mock-pokemon';
 import formatDate from '../helpers/format-date';
 import formatType from '../helpers/format-type';
+import PokemonService from '../services/pokemon-service';
+import Loader from '../components/loader';
 
 const PokemonsDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
 
   useEffect(() => {
-    if (!id) {
-      setPokemon(null);
-      return;
-    }
-
-    const foundPokemon = POKEMONS.find(pokemon => pokemon.id.toString() === id);
-    setPokemon(foundPokemon || null);
+    PokemonService.getPokemon(id).then(pokemon => setPokemon(pokemon));
   }, [id]);
 
-  if (!pokemon) {
-    return <h4 className="center">Aucun pokémon à afficher !</h4>;
-  }
-
   return (
-    <div className="container"> 
+    <div className="container">
+      { pokemon ? (
       <div className="row">
       <div className="col s12 m8 offset-m2"> 
         <h2 className="header center">{ pokemon.name }</h2>
@@ -72,6 +65,9 @@ const PokemonsDetail: React.FC = () => {
         </div>
       </div>
     </div>
+    ) : (
+      <h4 className="center"><Loader/></h4>
+    )}
     </div>
 
     
